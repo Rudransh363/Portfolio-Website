@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rudransh — Filmmaker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f8f7f4;
+      --fg: #111110;
+      --fg-muted: #6b6a65;
+      --fg-faint: #b0aea8;
+      --border: rgba(0,0,0,0.1);
+      --detail-bg: #f0efe9;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    html.dark {
+      --bg: #111110;
+      --fg: #f8f7f4;
+      --fg-muted: #9e9d98;
+      --fg-faint: #4a4a47;
+      --border: rgba(255,255,255,0.1);
+      --detail-bg: #1a1a18;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--mono);
+      font-weight: 300;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 3rem;
+      background: rgba(248,247,244,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 0.5px solid var(--border);
+      transition: background 0.3s;
+    }
+
+    html.dark nav { background: rgba(17,17,16,0.92); }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 300;
+      letter-spacing: 0.02em;
+      text-decoration: none;
+      color: var(--fg);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--fg-muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--fg); }
+
+    /* TOGGLE */
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .toggle-track {
+      width: 36px;
+      height: 20px;
+      border: 0.5px solid var(--fg-muted);
+      border-radius: 20px;
+      position: relative;
+      transition: border-color 0.3s;
+    }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 12px;
+      height: 12px;
+      background: var(--fg-muted);
+      border-radius: 50%;
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    html.dark .toggle-thumb {
+      transform: translateX(16px);
+      background: var(--fg);
+    }
+
+    html.dark .toggle-track { border-color: var(--fg); }
+
+    .toggle-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+      transition: color 0.3s;
+      user-select: none;
+    }
+
+    /* HERO */
+    .hero {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 8rem 3rem 5rem;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    .hero-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+      font-family: var(--serif);
+      font-size: clamp(3.5rem, 10vw, 8rem);
+      font-weight: 300;
+      line-height: 0.95;
+      letter-spacing: -0.01em;
+      margin-bottom: 2.5rem;
+      max-width: 14ch;
+    }
+
+    .hero-title em { font-style: italic; color: var(--fg-muted); }
+
+    .hero-desc {
+      font-size: 0.75rem;
+      line-height: 1.9;
+      color: var(--fg-muted);
+      max-width: 38ch;
+      margin-bottom: 3rem;
+      letter-spacing: 0.04em;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .btn-primary {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--bg);
+      background: var(--fg);
+      padding: 0.85rem 2rem;
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn-primary:hover { opacity: 0.8; }
+
+    .btn-secondary {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--fg-muted);
+      transition: color 0.2s;
+    }
+
+    .btn-secondary:hover { color: var(--fg); }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 3rem;
+      right: 3rem;
+      writing-mode: vertical-rl;
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .scroll-line {
+      width: 0.5px;
+      height: 3rem;
+      background: var(--fg-faint);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 1; transform: scaleY(0.6); }
+    }
+
+    .featured {
+      padding: 6rem 3rem;
+      border-top: 0.5px solid var(--border);
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 3rem;
+    }
+
+    .section-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+    }
+
+    .section-link {
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--fg-muted);
+      transition: color 0.2s;
+    }
+
+    .section-link:hover { color: var(--fg); }
+
+    .featured-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 1px;
+      background: var(--border);
+    }
+
+    .featured-item {
+      background: var(--bg);
+      padding: 2.5rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
+
+    html.dark .featured-item:hover { background: #1e1e1c; }
+    html:not(.dark) .featured-item:hover { background: #f0efe9; }
+
+    .featured-item.large {
+      grid-row: span 2;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      min-height: 380px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .film-placeholder {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .film-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      grid-template-rows: repeat(5, 1fr);
+      gap: 2px;
+      width: 100%;
+      height: 100%;
+      opacity: 0.08;
+    }
+
+    .film-cell { background: var(--fg); }
+    .film-cell:nth-child(3n) { opacity: 0.4; }
+    .film-cell:nth-child(5n) { opacity: 0.7; }
+    .film-cell:nth-child(7n) { opacity: 0.2; }
+
+    .item-meta { position: relative; z-index: 1; }
+
+    .item-number {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--fg-faint);
+      margin-bottom: 1rem;
+    }
+
+    .item-title {
+      font-family: var(--serif);
+      font-size: 1.6rem;
+      font-weight: 300;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .featured-item.large .item-title { font-size: 2.2rem; }
+
+    .item-type {
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+    }
+
+    footer {
+      padding: 2rem 3rem;
+      border-top: 0.5px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-text {
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      color: var(--fg-faint);
+    }
+
+    .footer-links { display: flex; gap: 1.5rem; }
+
+    .footer-links a {
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--fg); }
+
+    .fade-in {
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.8s ease forwards;
+    }
+
+    .fade-in:nth-child(1) { animation-delay: 0.1s; }
+    .fade-in:nth-child(2) { animation-delay: 0.25s; }
+    .fade-in:nth-child(3) { animation-delay: 0.4s; }
+    .fade-in:nth-child(4) { animation-delay: 0.55s; }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .nav-right { gap: 1.5rem; }
+      .hero { padding: 7rem 1.5rem 4rem; }
+      .featured { padding: 4rem 1.5rem; }
+      .featured-grid { grid-template-columns: 1fr; }
+      .featured-item.large { grid-row: span 1; min-height: 260px; }
+      footer { padding: 1.5rem; flex-direction: column; gap: 1rem; text-align: center; }
+      .scroll-indicator { display: none; }
+      .toggle-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Rudransh — Filmmaker</a>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="index.html" class="active">Home</a></li>
+        <li><a href="portfolio.html">Work</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+        <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        <span class="toggle-label" id="toggleLabel">Dark</span>
+      </button>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <p class="hero-label fade-in">Mumbai, India — Est. 2021</p>
+    <h1 class="hero-title fade-in">Frames that <em>linger</em></h1>
+    <p class="hero-desc fade-in">Documentary, narrative &amp; commercial filmmaking rooted in light, texture, and quiet observation. Every frame is a decision.</p>
+    <div class="hero-actions fade-in">
+      <a href="portfolio.html" class="btn-primary">View Work</a>
+      <a href="about.html" class="btn-secondary">About me →</a>
+    </div>
+    <div class="scroll-indicator">
+      <div class="scroll-line"></div>
+      Featured
+    </div>
+  </section>
+
+  <section class="featured">
+    <div class="section-header">
+      <span class="section-label">Selected Work</span>
+      <a href="portfolio.html" class="section-link">All Projects →</a>
+    </div>
+    <div class="featured-grid">
+      <a href="portfolio.html#monsoon" class="featured-item large">
+        <div class="film-placeholder">
+          <div class="film-grid">
+            <div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div>
+            <div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div>
+            <div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div>
+            <div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div>
+            <div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div><div class="film-cell"></div>
+          </div>
+        </div>
+        <div class="item-meta">
+          <p class="item-number">001</p>
+          <h2 class="item-title">Monsoon Portraits</h2>
+          <p class="item-type">Documentary Short · 2024</p>
+        </div>
+      </a>
+      <a href="portfolio.html#stillwater" class="featured-item">
+        <p class="item-number">002</p>
+        <h2 class="item-title">Stillwater</h2>
+        <p class="item-type">Narrative · 2023</p>
+      </a>
+      <a href="portfolio.html#alchemy" class="featured-item">
+        <p class="item-number">003</p>
+        <h2 class="item-title">Alchemy Brand Film</h2>
+        <p class="item-type">Commercial · 2024</p>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <p class="footer-text">© 2025 Rudransh. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="https://instagram.com" target="_blank">Instagram</a>
+      <a href="https://vimeo.com" target="_blank">Vimeo</a>
+      <a href="contact.html">Get in Touch</a>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      document.getElementById('toggleLabel').textContent = isDark ? 'Light' : 'Dark';
+    }
+
+    (function () {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.addEventListener('DOMContentLoaded', () => {
+          document.getElementById('toggleLabel').textContent = 'Light';
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>

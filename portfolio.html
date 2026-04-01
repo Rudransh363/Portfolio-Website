@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Work — Rudransh Filmmaker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f8f7f4;
+      --fg: #111110;
+      --fg-muted: #6b6a65;
+      --fg-faint: #b0aea8;
+      --border: rgba(0,0,0,0.1);
+      --detail-bg: #f0efe9;
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    html.dark {
+      --bg: #111110;
+      --fg: #f8f7f4;
+      --fg-muted: #9e9d98;
+      --fg-faint: #4a4a47;
+      --border: rgba(255,255,255,0.1);
+      --detail-bg: #1a1a18;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--mono);
+      font-weight: 300;
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 3rem;
+      background: rgba(248,247,244,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 0.5px solid var(--border);
+      transition: background 0.3s;
+    }
+
+    html.dark nav { background: rgba(17,17,16,0.92); }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 300;
+      text-decoration: none;
+      color: var(--fg);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--fg-muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--fg); }
+
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .toggle-track {
+      width: 36px;
+      height: 20px;
+      border: 0.5px solid var(--fg-muted);
+      border-radius: 20px;
+      position: relative;
+      transition: border-color 0.3s;
+    }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 12px;
+      height: 12px;
+      background: var(--fg-muted);
+      border-radius: 50%;
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    html.dark .toggle-thumb { transform: translateX(16px); background: var(--fg); }
+    html.dark .toggle-track { border-color: var(--fg); }
+
+    .toggle-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+      transition: color 0.3s;
+      user-select: none;
+    }
+
+    .page-header {
+      padding: 10rem 3rem 4rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .page-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      margin-bottom: 1.25rem;
+    }
+
+    .page-title {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 7vw, 5rem);
+      font-weight: 300;
+      line-height: 1;
+    }
+
+    .filters {
+      padding: 2rem 3rem;
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 0.5px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.5rem 1rem;
+      border: 0.5px solid var(--border);
+      background: transparent;
+      color: var(--fg-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .filter-btn:hover { color: var(--fg); border-color: var(--fg-muted); }
+    .filter-btn.active { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+    .project-list { padding: 0 3rem; }
+
+    .project-item {
+      display: grid;
+      grid-template-columns: 4rem 1fr auto;
+      align-items: start;
+      gap: 2rem;
+      padding: 2.5rem 0;
+      border-bottom: 0.5px solid var(--border);
+      color: inherit;
+      cursor: pointer;
+    }
+
+    .project-item:hover .project-title { letter-spacing: 0.02em; }
+
+    .project-num {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      color: var(--fg-faint);
+      padding-top: 0.3rem;
+    }
+
+    .project-title {
+      font-family: var(--serif);
+      font-size: 1.9rem;
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 0.6rem;
+      transition: letter-spacing 0.3s ease;
+    }
+
+    .project-tags { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .project-tag {
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+    }
+
+    .project-year {
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      color: var(--fg-faint);
+      padding-top: 0.35rem;
+      white-space: nowrap;
+    }
+
+    .project-detail {
+      display: none;
+      padding: 3rem;
+      border-bottom: 0.5px solid var(--border);
+      background: var(--detail-bg);
+      transition: background 0.3s;
+    }
+
+    .project-detail.open { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; }
+
+    .detail-visual {
+      aspect-ratio: 16/9;
+      background: var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .play-icon {
+      width: 56px;
+      height: 56px;
+      border: 0.5px solid var(--fg-muted);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .play-icon:hover { border-color: var(--fg); }
+
+    .play-triangle {
+      width: 0;
+      height: 0;
+      border-top: 8px solid transparent;
+      border-bottom: 8px solid transparent;
+      border-left: 14px solid var(--fg-muted);
+      margin-left: 3px;
+    }
+
+    .detail-type {
+      font-size: 0.62rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      margin-bottom: 1.25rem;
+    }
+
+    .detail-title {
+      font-family: var(--serif);
+      font-size: 2.2rem;
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+      line-height: 1.1;
+    }
+
+    .detail-desc {
+      font-size: 0.72rem;
+      line-height: 2;
+      color: var(--fg-muted);
+      margin-bottom: 2rem;
+      letter-spacing: 0.03em;
+    }
+
+    .detail-specs { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .spec-item { border-top: 0.5px solid var(--border); padding-top: 0.75rem; }
+
+    .spec-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      margin-bottom: 0.25rem;
+    }
+
+    .spec-value { font-size: 0.7rem; color: var(--fg-muted); }
+
+    .close-btn {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+      background: none;
+      border: none;
+      cursor: pointer;
+      margin-top: 2rem;
+      padding: 0;
+      display: block;
+      transition: color 0.2s;
+    }
+
+    .close-btn:hover { color: var(--fg); }
+
+    footer {
+      padding: 2rem 3rem;
+      border-top: 0.5px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-text { font-size: 0.62rem; letter-spacing: 0.1em; color: var(--fg-faint); }
+    .footer-links { display: flex; gap: 1.5rem; }
+
+    .footer-links a {
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--fg); }
+
+    @media (max-width: 768px) {
+      nav { padding: 1.25rem 1.5rem; }
+      .nav-right { gap: 1.5rem; }
+      .page-header, .project-list, .filters { padding-left: 1.5rem; padding-right: 1.5rem; }
+      .project-item { grid-template-columns: 2.5rem 1fr; }
+      .project-year { display: none; }
+      .project-detail.open { grid-template-columns: 1fr; gap: 2rem; padding: 2rem 1.5rem; }
+      footer { padding: 1.5rem; flex-direction: column; gap: 1rem; }
+      .toggle-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Rudransh — Filmmaker</a>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="portfolio.html" class="active">Work</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+        <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        <span class="toggle-label" id="toggleLabel">Dark</span>
+      </button>
+    </div>
+  </nav>
+
+  <header class="page-header">
+    <p class="page-label">Portfolio</p>
+    <h1 class="page-title">Selected Work</h1>
+  </header>
+
+  <div class="filters">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="documentary">Documentary</button>
+    <button class="filter-btn" data-filter="narrative">Narrative</button>
+    <button class="filter-btn" data-filter="commercial">Commercial</button>
+    <button class="filter-btn" data-filter="experimental">Experimental</button>
+  </div>
+
+  <div class="project-list" id="projectList">
+
+    <div class="project-item" data-category="documentary" id="monsoon" onclick="toggleDetail('detail-monsoon', this)">
+      <span class="project-num">001</span>
+      <div class="project-info">
+        <h2 class="project-title">Monsoon Portraits</h2>
+        <div class="project-tags">
+          <span class="project-tag">Documentary</span>
+          <span class="project-tag">17 min</span>
+          <span class="project-tag">Mumbai</span>
+        </div>
+      </div>
+      <span class="project-year">2024</span>
+    </div>
+    <div class="project-detail" id="detail-monsoon">
+      <div class="detail-visual"><div class="play-icon"><div class="play-triangle"></div></div></div>
+      <div class="detail-meta">
+        <p class="detail-type">Documentary Short · 2024</p>
+        <h3 class="detail-title">Monsoon Portraits</h3>
+        <p class="detail-desc">A 17-minute observational documentary following four street vendors in Mumbai across the 2024 monsoon season. The film explores how water transforms the city — economically, socially, and emotionally — through close, unhurried camerawork.</p>
+        <div class="detail-specs">
+          <div class="spec-item"><p class="spec-label">Camera</p><p class="spec-value">Sony FX3</p></div>
+          <div class="spec-item"><p class="spec-label">Format</p><p class="spec-value">4K / S-Log3</p></div>
+          <div class="spec-item"><p class="spec-label">Role</p><p class="spec-value">Director, DP, Editor</p></div>
+          <div class="spec-item"><p class="spec-label">Status</p><p class="spec-value">Festival Circuit</p></div>
+        </div>
+        <button class="close-btn" onclick="closeDetail(event, 'detail-monsoon')">← Close</button>
+      </div>
+    </div>
+
+    <div class="project-item" data-category="narrative" id="stillwater" onclick="toggleDetail('detail-stillwater', this)">
+      <span class="project-num">002</span>
+      <div class="project-info">
+        <h2 class="project-title">Stillwater</h2>
+        <div class="project-tags">
+          <span class="project-tag">Narrative</span>
+          <span class="project-tag">Short Film</span>
+          <span class="project-tag">23 min</span>
+        </div>
+      </div>
+      <span class="project-year">2023</span>
+    </div>
+    <div class="project-detail" id="detail-stillwater">
+      <div class="detail-visual"><div class="play-icon"><div class="play-triangle"></div></div></div>
+      <div class="detail-meta">
+        <p class="detail-type">Narrative Short · 2023</p>
+        <h3 class="detail-title">Stillwater</h3>
+        <p class="detail-desc">A quiet drama set over a single afternoon in Alibaug. A father and son share a boat, a silence, and an unresolved argument. Stillwater won Best Cinematography at the KJSSE Student Film Festival 2023.</p>
+        <div class="detail-specs">
+          <div class="spec-item"><p class="spec-label">Camera</p><p class="spec-value">Canon C70</p></div>
+          <div class="spec-item"><p class="spec-label">Format</p><p class="spec-value">Cinema Gamma</p></div>
+          <div class="spec-item"><p class="spec-label">Role</p><p class="spec-value">Director, DP</p></div>
+          <div class="spec-item"><p class="spec-label">Award</p><p class="spec-value">Best Cinematography</p></div>
+        </div>
+        <button class="close-btn" onclick="closeDetail(event, 'detail-stillwater')">← Close</button>
+      </div>
+    </div>
+
+    <div class="project-item" data-category="commercial" id="alchemy" onclick="toggleDetail('detail-alchemy', this)">
+      <span class="project-num">003</span>
+      <div class="project-info">
+        <h2 class="project-title">Alchemy Brand Film</h2>
+        <div class="project-tags">
+          <span class="project-tag">Commercial</span>
+          <span class="project-tag">90 sec</span>
+          <span class="project-tag">Product</span>
+        </div>
+      </div>
+      <span class="project-year">2024</span>
+    </div>
+    <div class="project-detail" id="detail-alchemy">
+      <div class="detail-visual"><div class="play-icon"><div class="play-triangle"></div></div></div>
+      <div class="detail-meta">
+        <p class="detail-type">Commercial · 2024</p>
+        <h3 class="detail-title">Alchemy Brand Film</h3>
+        <p class="detail-desc">A 90-second brand film for a Pune-based sustainable skincare startup. Shot entirely on macro lenses to reveal texture and ingredient origins. The film ran across Instagram and their product launch campaign.</p>
+        <div class="detail-specs">
+          <div class="spec-item"><p class="spec-label">Client</p><p class="spec-value">Alchemy Skincare</p></div>
+          <div class="spec-item"><p class="spec-label">Format</p><p class="spec-value">Vertical + 16:9</p></div>
+          <div class="spec-item"><p class="spec-label">Role</p><p class="spec-value">Director, Editor</p></div>
+          <div class="spec-item"><p class="spec-label">Views</p><p class="spec-value">240K+</p></div>
+        </div>
+        <button class="close-btn" onclick="closeDetail(event, 'detail-alchemy')">← Close</button>
+      </div>
+    </div>
+
+    <div class="project-item" data-category="experimental" onclick="toggleDetail('detail-light', this)">
+      <span class="project-num">004</span>
+      <div class="project-info">
+        <h2 class="project-title">Light Study No. 3</h2>
+        <div class="project-tags">
+          <span class="project-tag">Experimental</span>
+          <span class="project-tag">8 min</span>
+          <span class="project-tag">Silent</span>
+        </div>
+      </div>
+      <span class="project-year">2023</span>
+    </div>
+    <div class="project-detail" id="detail-light">
+      <div class="detail-visual"><div class="play-icon"><div class="play-triangle"></div></div></div>
+      <div class="detail-meta">
+        <p class="detail-type">Experimental · 2023</p>
+        <h3 class="detail-title">Light Study No. 3</h3>
+        <p class="detail-desc">A silent, 8-minute meditation on shifting afternoon light through a single window over four consecutive days. Shot in-camera with no post-processing. Part of an ongoing series exploring duration and attention.</p>
+        <div class="detail-specs">
+          <div class="spec-item"><p class="spec-label">Camera</p><p class="spec-value">Sony A7IV</p></div>
+          <div class="spec-item"><p class="spec-label">Edit</p><p class="spec-value">No cut</p></div>
+          <div class="spec-item"><p class="spec-label">Role</p><p class="spec-value">Director</p></div>
+          <div class="spec-item"><p class="spec-label">Screened</p><p class="spec-value">Online</p></div>
+        </div>
+        <button class="close-btn" onclick="closeDetail(event, 'detail-light')">← Close</button>
+      </div>
+    </div>
+
+    <div class="project-item" data-category="documentary" onclick="toggleDetail('detail-weavers', this)">
+      <span class="project-num">005</span>
+      <div class="project-info">
+        <h2 class="project-title">The Weavers of Patan</h2>
+        <div class="project-tags">
+          <span class="project-tag">Documentary</span>
+          <span class="project-tag">32 min</span>
+          <span class="project-tag">Gujarat</span>
+        </div>
+      </div>
+      <span class="project-year">2022</span>
+    </div>
+    <div class="project-detail" id="detail-weavers">
+      <div class="detail-visual"><div class="play-icon"><div class="play-triangle"></div></div></div>
+      <div class="detail-meta">
+        <p class="detail-type">Documentary · 2022</p>
+        <h3 class="detail-title">The Weavers of Patan</h3>
+        <p class="detail-desc">A portrait of three Patola weaving families in Patan, Gujarat — one of the most intricate textile traditions in India. The film questions whether cultural preservation and economic survival can coexist without compromise.</p>
+        <div class="detail-specs">
+          <div class="spec-item"><p class="spec-label">Duration</p><p class="spec-value">32 minutes</p></div>
+          <div class="spec-item"><p class="spec-label">Language</p><p class="spec-value">Gujarati / Hindi</p></div>
+          <div class="spec-item"><p class="spec-label">Role</p><p class="spec-value">Director, DP</p></div>
+          <div class="spec-item"><p class="spec-label">Subtitles</p><p class="spec-value">English</p></div>
+        </div>
+        <button class="close-btn" onclick="closeDetail(event, 'detail-weavers')">← Close</button>
+      </div>
+    </div>
+
+  </div>
+
+  <footer>
+    <p class="footer-text">© 2025 Rudransh. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="https://instagram.com" target="_blank">Instagram</a>
+      <a href="https://vimeo.com" target="_blank">Vimeo</a>
+      <a href="contact.html">Get in Touch</a>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      document.getElementById('toggleLabel').textContent = isDark ? 'Light' : 'Dark';
+    }
+
+    (function () {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.addEventListener('DOMContentLoaded', () => {
+          document.getElementById('toggleLabel').textContent = 'Light';
+        });
+      }
+    })();
+
+    function toggleDetail(id, row) {
+      const detail = document.getElementById(id);
+      const isOpen = detail.classList.contains('open');
+      document.querySelectorAll('.project-detail.open').forEach(d => d.classList.remove('open'));
+      if (!isOpen) detail.classList.add('open');
+    }
+
+    function closeDetail(e, id) {
+      e.stopPropagation();
+      document.getElementById(id).classList.remove('open');
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        document.querySelectorAll('.project-item').forEach(item => {
+          const cat = item.dataset.category;
+          item.style.display = (filter === 'all' || cat === filter) ? '' : 'none';
+          const detail = item.nextElementSibling;
+          if (detail && detail.classList.contains('project-detail')) {
+            if (item.style.display === 'none') detail.classList.remove('open');
+          }
+        });
+      });
+    });
+  </script>
+
+</body>
+</html>

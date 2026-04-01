@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Rudransh Filmmaker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f8f7f4;
+      --fg: #111110;
+      --fg-muted: #6b6a65;
+      --fg-faint: #b0aea8;
+      --border: rgba(0,0,0,0.1);
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    html.dark {
+      --bg: #111110;
+      --fg: #f8f7f4;
+      --fg-muted: #9e9d98;
+      --fg-faint: #4a4a47;
+      --border: rgba(255,255,255,0.1);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--mono);
+      font-weight: 300;
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 3rem;
+      background: rgba(248,247,244,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 0.5px solid var(--border);
+      transition: background 0.3s;
+    }
+
+    html.dark nav { background: rgba(17,17,16,0.92); }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 300;
+      text-decoration: none;
+      color: var(--fg);
+    }
+
+    .nav-right { display: flex; align-items: center; gap: 2.5rem; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+
+    .nav-links a {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--fg-muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--fg); }
+
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .toggle-track {
+      width: 36px;
+      height: 20px;
+      border: 0.5px solid var(--fg-muted);
+      border-radius: 20px;
+      position: relative;
+      transition: border-color 0.3s;
+    }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 12px; height: 12px;
+      background: var(--fg-muted);
+      border-radius: 50%;
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    html.dark .toggle-thumb { transform: translateX(16px); background: var(--fg); }
+    html.dark .toggle-track { border-color: var(--fg); }
+
+    .toggle-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+      user-select: none;
+    }
+
+    .about-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+    }
+
+    .about-left {
+      padding: 10rem 3rem 5rem;
+      border-right: 0.5px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .page-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      margin-bottom: 1.25rem;
+    }
+
+    .about-name {
+      font-family: var(--serif);
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      font-weight: 300;
+      line-height: 1.05;
+      margin-bottom: 3rem;
+    }
+
+    .about-name em { font-style: italic; color: var(--fg-muted); }
+
+    .portrait {
+      width: 100%;
+      max-width: 320px;
+      aspect-ratio: 3/4;
+      background: #e8e7e1;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    html.dark .portrait { background: #1e1e1c; }
+
+    .portrait-lines {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-evenly;
+      padding: 2rem;
+      opacity: 0.15;
+    }
+
+    .portrait-line { height: 0.5px; background: var(--fg); }
+
+    .portrait-initials {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      font-family: var(--serif);
+      font-size: 4rem;
+      font-weight: 300;
+      color: var(--fg-muted);
+      line-height: 1;
+      opacity: 0.4;
+    }
+
+    .credits { font-size: 0.62rem; letter-spacing: 0.1em; color: var(--fg-faint); }
+
+    .about-right { padding: 10rem 3rem 5rem; }
+
+    .bio-section { margin-bottom: 4rem; }
+
+    .bio-section-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .bio-text {
+      font-size: 0.78rem;
+      line-height: 2.1;
+      color: var(--fg-muted);
+      letter-spacing: 0.025em;
+    }
+
+    .bio-text + .bio-text { margin-top: 1.25rem; }
+
+    .gear-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+
+    .gear-item { padding: 1rem 0; border-bottom: 0.5px solid var(--border); }
+    .gear-item:nth-child(odd) { padding-right: 2rem; border-right: 0.5px solid var(--border); }
+    .gear-item:nth-child(even) { padding-left: 2rem; }
+
+    .gear-cat { font-size: 0.58rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--fg-faint); margin-bottom: 0.3rem; }
+    .gear-name { font-size: 0.72rem; color: var(--fg-muted); letter-spacing: 0.03em; }
+
+    .award-list { list-style: none; }
+
+    .award-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.85rem 0;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .award-name { font-size: 0.72rem; color: var(--fg-muted); }
+    .award-year { font-size: 0.62rem; color: var(--fg-faint); letter-spacing: 0.1em; }
+
+    .about-cta {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 0.5px solid var(--border);
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .btn-primary {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--bg);
+      background: var(--fg);
+      padding: 0.85rem 2rem;
+      transition: opacity 0.2s;
+    }
+
+    .btn-primary:hover { opacity: 0.8; }
+
+    .btn-link {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--fg-muted);
+      transition: color 0.2s;
+    }
+
+    .btn-link:hover { color: var(--fg); }
+
+    footer {
+      padding: 2rem 3rem;
+      border-top: 0.5px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-text { font-size: 0.62rem; letter-spacing: 0.1em; color: var(--fg-faint); }
+    .footer-links { display: flex; gap: 1.5rem; }
+
+    .footer-links a {
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--fg); }
+
+    @media (max-width: 900px) {
+      .about-wrap { grid-template-columns: 1fr; }
+      .about-left { padding: 8rem 1.5rem 3rem; border-right: none; border-bottom: 0.5px solid var(--border); }
+      .about-right { padding: 3rem 1.5rem 5rem; }
+      nav { padding: 1.25rem 1.5rem; }
+      .nav-right { gap: 1.5rem; }
+      footer { padding: 1.5rem; flex-direction: column; gap: 1rem; }
+      .toggle-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Rudransh — Filmmaker</a>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="portfolio.html">Work</a></li>
+        <li><a href="about.html" class="active">About</a></li>
+        <li><a href="contact.html">Contact</a></li>
+      </ul>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+        <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        <span class="toggle-label" id="toggleLabel">Dark</span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="about-wrap">
+    <div class="about-left">
+      <div>
+        <p class="page-label">About</p>
+        <h1 class="about-name">Rudransh<br /><em>Filmmaker &amp;<br />Visual Artist</em></h1>
+      </div>
+      <div>
+        <div class="portrait">
+          <div class="portrait-lines">
+            <div class="portrait-line"></div><div class="portrait-line"></div>
+            <div class="portrait-line"></div><div class="portrait-line"></div>
+            <div class="portrait-line"></div><div class="portrait-line"></div>
+          </div>
+          <div class="portrait-initials">R.</div>
+        </div>
+        <p class="credits">Mumbai, India · Available for projects</p>
+      </div>
+    </div>
+
+    <div class="about-right">
+      <div class="bio-section">
+        <p class="bio-section-label">Biography</p>
+        <p class="bio-text">I'm a Mumbai-based filmmaker with a focus on documentary, narrative short, and brand films. My work is drawn to ordinary moments that carry extraordinary weight — a hand gesture, the quality of light at 4pm, the pause before someone speaks.</p>
+        <p class="bio-text">Currently in my final year studying Information Technology at Somaiya Vidyavihar University, I approach filmmaking as a discipline of sustained attention. I shoot, direct, and often edit my own work — believing that the relationship between camera and subject should be developed by one mind, not fragmented across departments.</p>
+        <p class="bio-text">Open to documentary, narrative, and commercial collaborations that value slowness, precision, and intentionality.</p>
+      </div>
+
+      <div class="bio-section">
+        <p class="bio-section-label">Equipment</p>
+        <div class="gear-grid">
+          <div class="gear-item"><p class="gear-cat">Primary</p><p class="gear-name">Sony FX3</p></div>
+          <div class="gear-item"><p class="gear-cat">Secondary</p><p class="gear-name">Sony A7IV</p></div>
+          <div class="gear-item"><p class="gear-cat">Lenses</p><p class="gear-name">Sigma Art 35mm, 85mm</p></div>
+          <div class="gear-item"><p class="gear-cat">Stabiliser</p><p class="gear-name">DJI RS3 Pro</p></div>
+          <div class="gear-item"><p class="gear-cat">Audio</p><p class="gear-name">Zoom F3 + Deity S-Mic 2</p></div>
+          <div class="gear-item"><p class="gear-cat">Edit / Grade</p><p class="gear-name">DaVinci Resolve</p></div>
+        </div>
+      </div>
+
+      <div class="bio-section">
+        <p class="bio-section-label">Recognition</p>
+        <ul class="award-list">
+          <li class="award-item"><span class="award-name">Best Cinematography — KJSSE Student Film Festival</span><span class="award-year">2023</span></li>
+          <li class="award-item"><span class="award-name">Official Selection — Mumbai Youth Documentary Showcase</span><span class="award-year">2024</span></li>
+          <li class="award-item"><span class="award-name">Finalist — Lenscraft Short Film Competition</span><span class="award-year">2024</span></li>
+        </ul>
+      </div>
+
+      <div class="about-cta">
+        <a href="contact.html" class="btn-primary">Work Together</a>
+        <a href="portfolio.html" class="btn-link">View Work →</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p class="footer-text">© 2025 Rudransh. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="https://instagram.com" target="_blank">Instagram</a>
+      <a href="https://vimeo.com" target="_blank">Vimeo</a>
+      <a href="contact.html">Get in Touch</a>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      document.getElementById('toggleLabel').textContent = isDark ? 'Light' : 'Dark';
+    }
+
+    (function () {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.addEventListener('DOMContentLoaded', () => {
+          document.getElementById('toggleLabel').textContent = 'Light';
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>

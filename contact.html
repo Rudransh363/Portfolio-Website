@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact — Rudransh Filmmaker</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f8f7f4;
+      --fg: #111110;
+      --fg-muted: #6b6a65;
+      --fg-faint: #b0aea8;
+      --border: rgba(0,0,0,0.1);
+      --serif: 'Cormorant Garamond', Georgia, serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    html.dark {
+      --bg: #111110;
+      --fg: #f8f7f4;
+      --fg-muted: #9e9d98;
+      --fg-faint: #4a4a47;
+      --border: rgba(255,255,255,0.1);
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--mono);
+      font-weight: 300;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 3rem;
+      background: rgba(248,247,244,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 0.5px solid var(--border);
+      transition: background 0.3s;
+    }
+
+    html.dark nav { background: rgba(17,17,16,0.92); }
+
+    .nav-logo {
+      font-family: var(--serif);
+      font-size: 1.1rem;
+      font-weight: 300;
+      text-decoration: none;
+      color: var(--fg);
+    }
+
+    .nav-right { display: flex; align-items: center; gap: 2.5rem; }
+    .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+
+    .nav-links a {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-decoration: none;
+      color: var(--fg-muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--fg); }
+
+    .theme-toggle {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      cursor: pointer;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .toggle-track {
+      width: 36px;
+      height: 20px;
+      border: 0.5px solid var(--fg-muted);
+      border-radius: 20px;
+      position: relative;
+      transition: border-color 0.3s;
+    }
+
+    .toggle-thumb {
+      position: absolute;
+      top: 3px; left: 3px;
+      width: 12px; height: 12px;
+      background: var(--fg-muted);
+      border-radius: 50%;
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    html.dark .toggle-thumb { transform: translateX(16px); background: var(--fg); }
+    html.dark .toggle-track { border-color: var(--fg); }
+
+    .toggle-label {
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+      user-select: none;
+    }
+
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      flex: 1;
+    }
+
+    .contact-left {
+      padding: 10rem 3rem 5rem;
+      border-right: 0.5px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .page-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      margin-bottom: 1.25rem;
+    }
+
+    .contact-heading {
+      font-family: var(--serif);
+      font-size: clamp(2.2rem, 4.5vw, 4rem);
+      font-weight: 300;
+      line-height: 1.05;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-heading em { font-style: italic; color: var(--fg-muted); }
+
+    .contact-note {
+      font-size: 0.72rem;
+      line-height: 2;
+      color: var(--fg-muted);
+      letter-spacing: 0.03em;
+      margin-bottom: 3rem;
+    }
+
+    .channel-item {
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem 0;
+      border-bottom: 0.5px solid var(--border);
+      text-decoration: none;
+      color: inherit;
+      transition: padding-left 0.2s;
+    }
+
+    .channel-item:first-child { border-top: 0.5px solid var(--border); }
+    .channel-item:hover { padding-left: 0.5rem; }
+
+    .channel-label {
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      margin-bottom: 0.3rem;
+    }
+
+    .channel-value { font-size: 0.78rem; color: var(--fg-muted); letter-spacing: 0.03em; }
+
+    .availability {
+      margin-top: 3rem;
+      padding: 1.25rem;
+      border: 0.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .avail-dot {
+      width: 7px; height: 7px;
+      background: #3d9e5e;
+      border-radius: 50%;
+      flex-shrink: 0;
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+
+    .avail-text { font-size: 0.65rem; letter-spacing: 0.1em; color: var(--fg-muted); }
+
+    .contact-right { padding: 10rem 3rem 5rem; }
+
+    .form-label-row {
+      font-size: 0.6rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      margin-bottom: 2.5rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .contact-form { display: flex; flex-direction: column; gap: 2rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.6rem; }
+
+    .form-group label {
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+    }
+
+    .form-group input,
+    .form-group textarea {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      font-weight: 300;
+      background: transparent;
+      border: none;
+      border-bottom: 0.5px solid var(--border);
+      padding: 0.6rem 0;
+      color: var(--fg);
+      outline: none;
+      letter-spacing: 0.03em;
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: var(--fg-faint); }
+
+    .form-group input:focus,
+    .form-group textarea:focus { border-color: var(--fg-muted); }
+
+    .form-group textarea { resize: none; height: 120px; line-height: 1.9; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+
+    .form-type-options {
+      display: flex;
+      border: 0.5px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .type-option { flex: 1; min-width: max-content; }
+    .type-option input[type="radio"] { display: none; }
+
+    .type-option label {
+      display: block;
+      text-align: center;
+      padding: 0.7rem 1rem;
+      font-size: 0.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--fg-muted);
+      cursor: pointer;
+      border-right: 0.5px solid var(--border);
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .type-option:last-child label { border-right: none; }
+
+    .type-option input[type="radio"]:checked + label {
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    .form-submit {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1rem;
+      border-top: 0.5px solid var(--border);
+    }
+
+    .submit-note { font-size: 0.62rem; color: var(--fg-faint); letter-spacing: 0.06em; }
+
+    .btn-submit {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.85rem 2rem;
+      background: var(--fg);
+      color: var(--bg);
+      border: none;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn-submit:hover { opacity: 0.8; }
+
+    .form-success {
+      display: none;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 3rem 0;
+    }
+
+    .success-icon {
+      width: 40px; height: 40px;
+      border: 0.5px solid var(--fg-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .success-check {
+      width: 14px; height: 8px;
+      border-left: 1px solid var(--fg-muted);
+      border-bottom: 1px solid var(--fg-muted);
+      transform: rotate(-45deg) translateY(-2px);
+    }
+
+    .success-title { font-family: var(--serif); font-size: 2rem; font-weight: 300; }
+
+    .success-text { font-size: 0.72rem; color: var(--fg-muted); line-height: 2; letter-spacing: 0.03em; }
+
+    footer {
+      padding: 2rem 3rem;
+      border-top: 0.5px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-text { font-size: 0.62rem; letter-spacing: 0.1em; color: var(--fg-faint); }
+    .footer-links { display: flex; gap: 1.5rem; }
+
+    .footer-links a {
+      font-size: 0.62rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--fg-faint);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--fg); }
+
+    @media (max-width: 900px) {
+      .contact-wrap { grid-template-columns: 1fr; }
+      .contact-left { padding: 8rem 1.5rem 3rem; border-right: none; border-bottom: 0.5px solid var(--border); }
+      .contact-right { padding: 3rem 1.5rem 5rem; }
+      .form-row { grid-template-columns: 1fr; gap: 1.5rem; }
+      .form-submit { flex-direction: column; align-items: flex-start; gap: 1rem; }
+      nav { padding: 1.25rem 1.5rem; }
+      .nav-right { gap: 1.5rem; }
+      footer { padding: 1.5rem; flex-direction: column; gap: 1rem; }
+      .toggle-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Rudransh — Filmmaker</a>
+    <div class="nav-right">
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="portfolio.html">Work</a></li>
+        <li><a href="about.html">About</a></li>
+        <li><a href="contact.html" class="active">Contact</a></li>
+      </ul>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+        <div class="toggle-track"><div class="toggle-thumb"></div></div>
+        <span class="toggle-label" id="toggleLabel">Dark</span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="contact-wrap">
+    <div class="contact-left">
+      <div>
+        <p class="page-label">Contact</p>
+        <h1 class="contact-heading">Let's make<br /><em>something<br />together.</em></h1>
+        <p class="contact-note">Open to documentary projects, commercial commissions, and narrative collaborations. Response time is typically within 48 hours.</p>
+      </div>
+      <div>
+        <div class="contact-channels">
+          <a href="mailto:rudransh@example.com" class="channel-item">
+            <span class="channel-label">Email</span>
+            <span class="channel-value">rudransh@example.com</span>
+          </a>
+          <a href="https://instagram.com" target="_blank" class="channel-item">
+            <span class="channel-label">Instagram</span>
+            <span class="channel-value">@rudransh.films</span>
+          </a>
+          <a href="https://vimeo.com" target="_blank" class="channel-item">
+            <span class="channel-label">Vimeo</span>
+            <span class="channel-value">vimeo.com/rudransh</span>
+          </a>
+          <a href="#" class="channel-item">
+            <span class="channel-label">Location</span>
+            <span class="channel-value">Mumbai, Maharashtra, India</span>
+          </a>
+        </div>
+        <div class="availability">
+          <div class="avail-dot"></div>
+          <span class="avail-text">Currently available for new projects — 2025</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="contact-right">
+      <p class="form-label-row">Send a message</p>
+      <form class="contact-form" id="contactForm" onsubmit="handleSubmit(event)">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" id="name" placeholder="Your name" required />
+          </div>
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="your@email.com" required />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Project type</label>
+          <div class="form-type-options">
+            <div class="type-option"><input type="radio" name="type" id="type-doc" value="documentary" checked /><label for="type-doc">Documentary</label></div>
+            <div class="type-option"><input type="radio" name="type" id="type-nar" value="narrative" /><label for="type-nar">Narrative</label></div>
+            <div class="type-option"><input type="radio" name="type" id="type-com" value="commercial" /><label for="type-com">Commercial</label></div>
+            <div class="type-option"><input type="radio" name="type" id="type-oth" value="other" /><label for="type-oth">Other</label></div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="subject">Project brief</label>
+          <input type="text" id="subject" placeholder="One line about the project" />
+        </div>
+        <div class="form-group">
+          <label for="message">Message</label>
+          <textarea id="message" placeholder="Tell me more — timeline, scope, budget, inspiration..." required></textarea>
+        </div>
+        <div class="form-submit">
+          <span class="submit-note">No spam. Just films.</span>
+          <button type="submit" class="btn-submit">Send Message →</button>
+        </div>
+      </form>
+      <div class="form-success" id="formSuccess">
+        <div class="success-icon"><div class="success-check"></div></div>
+        <h2 class="success-title">Message sent.</h2>
+        <p class="success-text">Thank you for reaching out. I'll review your project<br />and get back to you within 48 hours.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <p class="footer-text">© 2025 Rudransh. All rights reserved.</p>
+    <div class="footer-links">
+      <a href="https://instagram.com" target="_blank">Instagram</a>
+      <a href="https://vimeo.com" target="_blank">Vimeo</a>
+      <a href="portfolio.html">View Work</a>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      document.getElementById('toggleLabel').textContent = isDark ? 'Light' : 'Dark';
+    }
+
+    (function () {
+      const saved = localStorage.getItem('theme');
+      if (saved === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.addEventListener('DOMContentLoaded', () => {
+          document.getElementById('toggleLabel').textContent = 'Light';
+        });
+      }
+    })();
+
+    function handleSubmit(e) {
+      e.preventDefault();
+      document.getElementById('contactForm').style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'flex';
+    }
+  </script>
+
+</body>
+</html>
